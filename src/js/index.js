@@ -134,9 +134,10 @@ elements.shopping.addEventListener('click', event => {
 	}
 });
 
-//LIKE CONTROLLER
+//LIKES CONTROLLER
 
 state.likes = new Likes();
+likesView.toggleLikeMenu(state.likes.getNumLikes());
 const controlLike = () => {
 	if(!state.likes) state.likes = new Likes();
 	const currID = state.recipe.id;
@@ -155,7 +156,7 @@ const controlLike = () => {
 		likesView.toggleLikeBtn(true);
 
 		//render on the UI
-		console.log(state.likes);
+		likesView.renderLikes(newLike);
 
 	//if user has liked the recipe
 	} else{
@@ -166,8 +167,9 @@ const controlLike = () => {
 		likesView.toggleLikeBtn(false);
 
 		//remove from the UI
-		console.log(state.likes);
+		likesView.deleteLike(currID);
 	}
+	likesView.toggleLikeMenu(state.likes.getNumLikes());
 }
 
 
