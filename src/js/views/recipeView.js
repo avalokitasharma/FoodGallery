@@ -1,14 +1,33 @@
 import {elements} from './base.js';
+import {Fraction} from 'fractional';
 
 export const clearResults = () => {
     elements.recipe.innerHTML = ''
+};
+
+const formatCount = count => {
+    console.log('in formatCount')
+    if(count) {
+        const [int,dec] = count.toString().split('.').map(el => parseInt(el,10));
+        if(!dec) return count;
+        console.log(int,dec)
+        if(int === 0) {
+            const fr = new Fraction(count);
+            return `${fr.numerator}/${fr.denominator}`;
+        } else {
+            const fr = new Fraction(count - int);
+            return `${int} ${fr.numerator}/${fr.denominator}`;
+        }
+
+    }
+    return'?';
 };
 
 const createIngredients = ingredient => `<li class="recipe__item">
                                             <svg class="recipe__icon">
                                                 <use href="img/icons.svg#icon-check"></use>
                                             </svg>
-                                            <div class="recipe__count">${ingredient.count}</div>
+                                            <div class="recipe__count">${formatCount(ingredient.count)}</div>
                                             <div class="recipe__ingredient">
                                                 <span class="recipe__unit">${ingredient.unit}</span>
                                                 ${ingredient.ingredient}
@@ -88,4 +107,5 @@ export const renderRecipeDetails = (recipe) => {
             </div>
 	    `;
         elements.recipe.insertAdjacentHTML('afterbegin',markup);
+        console.log('what the gell');
 }
