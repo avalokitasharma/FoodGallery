@@ -15,7 +15,6 @@ import {elements, renderLoader, clearLoader} from './views/base.js';
 - linked recipes
 */
 const state = {};
-window.state = state;
 
 //SEARCH CONTROLLER
 
@@ -129,15 +128,11 @@ elements.shopping.addEventListener('click', event => {
 	} else if(event.target.matches('.shopping__count--value')){
 		//update count in state
 		const val = parseFloat(event.target.value,10);
-		console.log(val)
 		state.list.updateCount(id, val);
 	}
 });
 
 //LIKES CONTROLLER
-
-state.likes = new Likes();
-likesView.toggleLikeMenu(state.likes.getNumLikes());
 const controlLike = () => {
 	if(!state.likes) state.likes = new Likes();
 	const currID = state.recipe.id;
@@ -171,7 +166,18 @@ const controlLike = () => {
 	}
 	likesView.toggleLikeMenu(state.likes.getNumLikes());
 }
+//restoring likes from local storage
+window.addEventListener('load', () => {
+	state.likes = new Likes();
 
+	//restore likes
+	state.likes.readStorage();
+	//toggle like menu btn
+	likesView.toggleLikeMenu(state.likes.getNumLikes());
+	//render the existing likes
+	state.likes.likes.forEach(like => likesView.renderLikes(like));
+
+})
 
 //Handling recipe btn clicks
 
